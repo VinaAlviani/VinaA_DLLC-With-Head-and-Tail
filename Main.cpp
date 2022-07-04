@@ -1,13 +1,13 @@
 #include <iostream>
-//VINA ALVIANI
-//1121031008
-//INFORMATIKA_B
-
+// VINA ALVIANI
+// 1121031008
+// INFORMATIKA B
 using namespace std;
 
 struct TNode {
     int data;       // field data
     TNode *next;    // field pointer next
+    int key;
     TNode *prev;    // field pointer prev
 };
 
@@ -52,6 +52,31 @@ void insertDepan(int dataBaru) {
     cout << "Data " << dataBaru << " masuk sebagai node paling depan" << endl;
 }
 
+void deleteNode(TNode** head_ref, int key)
+{
+    TNode* temp = *head_ref;
+    TNode* prev = NULL;
+    if (temp != NULL && temp->data == key)
+    {
+        *head_ref = temp->next; // Changed head
+        delete temp;            // free old head
+        return;
+    }
+        else
+    {
+    while (temp != NULL && temp->data != key)
+    {
+        prev = temp;
+        temp = temp->next;
+    }
+    if (temp == NULL)
+        return;
+
+    prev->next = temp->next;
+
+    delete temp;
+    }
+}
 void insertBelakang(int dataBaru) {
     TNode *nodeBaru;
     nodeBaru = new TNode;
@@ -138,6 +163,30 @@ void hapusSemua() {
     cout << "Linked List kosong\n";
 }
 
+void search(int searchValue){
+    TNode *temp = head;
+    int found = 0;
+    int i = 0;
+
+    if(temp != NULL) {
+        while(temp != NULL) {
+          i++;
+          if(temp->data == searchValue) {
+            found++;
+            break;
+          }
+          temp = temp->next;
+        }
+        if (found == 1) {
+          cout<<searchValue<<" Adalah data yang sama = "<<i<<".\n";
+        } else {
+          cout<<searchValue<<" Tidak Ditemukan Dalam Daftar.\n";
+        }
+      } else {
+        cout<<"The list is empty.\n";
+      }
+}
+
 void tampilData() {
     TNode *nodeBantu;
 
@@ -153,61 +202,13 @@ void tampilData() {
     }
 }
 
-void cariData( int cari){
-  TNode *nodeBantu;
-  // bool ketemu = false;
-  nodeBantu = head;
-    if(isEmpty() != 1){
-      while (nodeBantu != NULL){
-        if (nodeBantu ->data == cari){
-          // ketemu = true;
-          cout << "Ketemu Data -> " << nodeBantu->data ;
-          return;
-        } 
-          nodeBantu = nodeBantu -> next;
-        if (nodeBantu == tail -> next){
-          cout << "Data tidak ditemukan\n";
-          break;
-        }
-      }
-    }else{cout << "Data tidak ditemukan List Kosong\n"; }
-  
-}
-
-void hapusData(int input){
-   TNode* nodeBantu = head; 
-    TNode* hapus = NULL;
-  if (isEmpty() != 1 ){
-     if (nodeBantu != NULL && nodeBantu->data == input){ 
-         head = nodeBantu->next; // mengubah node head 
-         delete nodeBantu;       // menghapus node yang diinginkan
-         cout << "Data " << input << " telah dihapus\n" ;
-         tampilData();
-         return; 
-     } 
-       else{ 
-         while (nodeBantu != NULL && nodeBantu->data != input){ 
-           hapus = nodeBantu; 
-           nodeBantu = nodeBantu->next; 
-         if (nodeBantu == tail -> next){
-           cout << "Data tidak ditemukan\n";
-           return;
-           } hapus->next = nodeBantu->next;     
-         }
-       }
-        cout << "Data " << input << " telah dihapus\n" ;
-        tampilData();
-    return;
-    }cout << "Data tidak ditemukan List Kosong\n";
-}
-
 int main() {
     int pil, dataBaru;
 
     do {
         cout<<" \n"<<endl;
         cout<<" ============================"<<endl;
-        cout<<" =   SLLC WITH HEAD & TAIL  ="<<endl;
+        cout<<" =   DLLC HEAD & TAIL       ="<<endl;
         cout<<" ============================"<<endl;
         cout<<" = 1. Insert Depan          ="<<endl;
         cout<<" = 2. Insert Belakang       ="<<endl;
@@ -215,8 +216,8 @@ int main() {
         cout<<" = 4. Hapus Belakang        ="<<endl;
         cout<<" = 5. Tampil Data           ="<<endl;
         cout<<" = 6. Hapus semua Data      ="<<endl;
-        cout<<" = 7. Cari Data Tetentu     ="<<endl;
-        cout<<" = 8. Hapus Data Tertentu   ="<<endl;
+        cout<<" = 7. Cari Data             ="<<endl;
+        cout<<" = 8. Hapus Data            ="<<endl;
         cout<<" = 9. Exit                  ="<<endl;
         cout<<" ============================"<<endl;
         cout<<" Masukan Pilihan : ";
@@ -238,14 +239,14 @@ int main() {
             tampilData();
         } else if (pil == 6) {
             hapusSemua();
-        } else if (pil == 7) {
-            cout << "Masukkan data yang ingin dicari = ";
-            cin >> dataBaru;
-            cariData(dataBaru);
-        } else if (pil == 8) {
-            cout << "Masukkan data yang ingin dihapus = ";
-            cin >> dataBaru;
-            hapusData(dataBaru);
+        }else if (pil == 7) {
+            cout<< "Masukan Data yang dicari :";
+            cin>>dataBaru;
+            search(dataBaru);
+        }else if (pil == 8) {
+            cout<< "Masukan Data yang ingin dihapus :";
+            cin>>dataBaru;
+            deleteNode(&head, dataBaru);
         } else if (pil != 9) {
             cout<<"\n Maaf, Pilihan yang anda pilih tidak tersedia!";
         }
